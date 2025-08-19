@@ -39,7 +39,7 @@ export default function Dashboard() {
       title: "Trending Anime",
       description: "See what's popular right now",
       icon: TrendingUp,
-      action: () => navigate("/recommendations?filter=trending"),
+      action: () => navigate("/Trending?filter=trending"),
       color: "text-anime-accent"
     }
   ];

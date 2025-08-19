@@ -8,13 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { Settings, Plus, X, Save, Trash2 } from "lucide-react";
+import { Settings, Plus, X, Save } from "lucide-react";
 
 export default function Preferences() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // TODO: Load from user data
   const [selectedGenres, setSelectedGenres] = useState<string[]>([
     "Action", "Adventure", "Shounen"
   ]);
@@ -29,11 +28,23 @@ export default function Preferences() {
     "Shounen", "Shoujo", "Seinen", "Josei", "Mecha", "Supernatural"
   ];
 
+  // 🔥 Activity Logger
+  const recordActivity = (action: string) => {
+    const activity = {
+      action,
+      timestamp: new Date().toISOString(),
+    };
+    const history = JSON.parse(localStorage.getItem("recentActivity") || "[]");
+    history.unshift(activity);
+    localStorage.setItem("recentActivity", JSON.stringify(history));
+  };
+
   const handleLogout = () => {
     toast({
       title: "Logged out",
       description: "You have been successfully logged out.",
     });
+    recordActivity("Logged out");
     navigate("/");
   };
 
@@ -43,24 +54,26 @@ export default function Preferences() {
         ? prev.filter(g => g !== genre)
         : [...prev, genre]
     );
+    recordActivity(`Toggled genre: ${genre}`);
   };
 
   const addKeyword = () => {
     if (newKeyword.trim() && !keywords.includes(newKeyword.trim())) {
       setKeywords(prev => [...prev, newKeyword.trim()]);
+      recordActivity(`Added keyword: ${newKeyword.trim()}`);
       setNewKeyword("");
     }
   };
 
   const removeKeyword = (keyword: string) => {
     setKeywords(prev => prev.filter(k => k !== keyword));
+    recordActivity(`Removed keyword: ${keyword}`);
   };
 
   const handleSave = async () => {
     try {
-      // TODO: Save to Supabase
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      recordActivity("Saved preferences");
       toast({
         title: "Preferences saved!",
         description: "Your anime preferences have been updated successfully.",
@@ -138,7 +151,6 @@ export default function Preferences() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Add new keyword */}
             <div className="flex space-x-2">
               <div className="flex-1">
                 <Label htmlFor="keyword" className="sr-only">Add keyword</Label>
@@ -161,7 +173,6 @@ export default function Preferences() {
               </Button>
             </div>
 
-            {/* Current keywords */}
             <div className="space-y-2">
               <Label>Current Keywords:</Label>
               <div className="flex flex-wrap gap-2">
@@ -228,10 +239,7 @@ export default function Preferences() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <GradientButton
-            onClick={handleSave}
-            className="px-8 py-3"
-          >
+          <GradientButton onClick={handleSave} className="px-8 py-3">
             <Save className="mr-2 h-4 w-4" />
             Save Preferences
           </GradientButton>

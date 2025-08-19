@@ -1,13 +1,22 @@
+import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Navbar } from "@/components/layout/Navbar";
 import { GradientButton } from "@/components/ui/gradient-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, TrendingUp, Users, Shield, Zap, Heart } from "lucide-react";
+import { Sparkles, TrendingUp, Users, Shield, Zap, Heart, Play } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 import heroImage from "@/assets/hero-bg.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
 
   const features = [
     {
@@ -43,8 +52,31 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+      {/* Navigation */}
+      <nav className="flex items-center justify-between p-6 backdrop-blur-sm bg-background/50 border-b border-border/50">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+            <Play className="w-4 h-4 text-primary-foreground" />
+          </div>
+          <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            AnimeVerse
+          </span>
+        </div>
+        
+        <div className="flex items-center space-x-4">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/auth")}
+            className="hover:bg-primary/10"
+          >
+            Sign In
+          </Button>
+          <GradientButton onClick={() => navigate("/auth")}>
+            Get Started
+          </GradientButton>
+        </div>
+      </nav>
       
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -57,34 +89,36 @@ const Index = () => {
         
         <div className="relative z-10 text-center max-w-4xl mx-auto px-6 space-y-8">
           <div className="space-y-4 animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-primary bg-clip-text text-transparent leading-tight">
-              CineSage
+            <h1 className="text-5xl md:text-7xl font-bold text-white">
+              Discover Your Next
+              <span className="block bg-gradient-primary bg-clip-text text-transparent">
+                Anime Adventure
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
-              Your intelligent anime companion. Discover, explore, and fall in love with anime tailored perfectly to your taste.
+            <p className="text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto">
+              Powered by AI recommendations, community insights, and your personal taste.
+              Find anime that matches your mood perfectly.
             </p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
-            <GradientButton
-              onClick={() => navigate("/register")}
-              className="px-8 py-4 text-lg font-semibold"
+            <GradientButton 
+              size="lg" 
+              onClick={() => navigate("/auth")}
+              className="text-lg px-8 py-6"
             >
-              <Sparkles className="mr-2 h-5 w-5" />
-              Start Your Journey
+              Start Exploring
+              <Sparkles className="ml-2 w-5 h-5" />
             </GradientButton>
-            <Button
-              variant="outline"
-              onClick={() => navigate("/login")}
-              className="px-8 py-4 text-lg border-2 border-primary/50 bg-background/50 hover:bg-primary/10 backdrop-blur-sm"
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="text-lg px-8 py-6 bg-white/10 border-white/20 text-white hover:bg-white/20"
             >
-              Sign In
+              Watch Demo
             </Button>
           </div>
           
-          <div className="text-sm text-muted-foreground">
-            Join thousands of anime fans discovering their next favorite series
-          </div>
         </div>
       </section>
 
@@ -92,11 +126,11 @@ const Index = () => {
       <section className="py-20 px-6">
         <div className="container mx-auto">
           <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              Why Choose CineSage?
+            <h2 className="text-4xl font-bold mb-4">
+              Why Choose AnimeVerse?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Powered by advanced algorithms and comprehensive anime data to bring you the perfect recommendations.
+              Discover the perfect anime experience with our advanced features
             </p>
           </div>
           
@@ -123,36 +157,28 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-hero">
-        <div className="container mx-auto text-center space-y-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-            Ready to Discover Your Next Favorite Anime?
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-6">
+            Ready to Find Your Perfect Anime?
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Join CineSage today and unlock a personalized anime discovery experience like no other.
+          <p className="text-xl text-muted-foreground mb-8">
+            Join thousands of anime fans discovering their next favorite series
           </p>
-          <GradientButton
-            onClick={() => navigate("/register")}
-            className="px-8 py-4 text-lg font-semibold"
+          <GradientButton 
+            size="lg"
+            onClick={() => navigate("/auth")}
+            className="text-lg px-8 py-6"
           >
-            <Heart className="mr-2 h-5 w-5" />
-            Get Started Free
+            Join AnimeVerse Today
           </GradientButton>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-border/50">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent">
-              CineSage
-            </span>
-          </div>
-          <p className="text-muted-foreground">
-            © 2024 CineSage. Made with ❤️ for anime fans everywhere.
-          </p>
+      <footer className="border-t border-border/50 py-8 px-6">
+        <div className="max-w-6xl mx-auto text-center text-muted-foreground">
+          <p>&copy; 2024 AnimeVerse. Discover your next anime adventure.</p>
         </div>
       </footer>
     </div>

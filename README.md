@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/bd7bfe29-a796-4e9b-8bb0-8d55681146ec
+**URL**: https://cine-sage-recommends.lovable.app/
 
 Follow these steps to use Code:
 
